@@ -1,0 +1,61 @@
+﻿<Page x:Class="WorkHoursManagementApp.Pages.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:Models="clr-namespace:WorkHoursManagementApp.Models"
+      xmlns:local="clr-namespace:WorkHoursManagementApp.UserControls"
+      mc:Ignorable="d" 
+      d:DesignHeight="453.2" d:DesignWidth="809.6"
+      Title="HomePage">
+    <Border Padding="30" Background="White">
+        <Grid Background="White" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Calendar Section -->
+            <Viewbox>
+                <Calendar Name="myCalendar" 
+                      BorderThickness="2" 
+                      BorderBrush="Black"
+                       HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Margin="10" />
+            </Viewbox>
+
+            <!-- Information Section -->
+            <StackPanel Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                <Viewbox>
+                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
+                        <Border.Background>
+                            <SolidColorBrush Color="#FF72DFD9" Opacity="0.5"/>
+                        </Border.Background>
+                        <local:WorkShiftControl />
+                    </Border>
+                </Viewbox>
+
+                <Viewbox>
+                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
+                        <Border.Background>
+                            <SolidColorBrush Color="#FFADE6B7" Opacity="0.5"/>
+                        </Border.Background>
+                        <local:ExtraTimeControl />
+                    </Border>
+                </Viewbox>
+
+                <Viewbox>
+                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
+                        <Border.Background>
+                            <SolidColorBrush Color="#FFE98B99" Opacity="0.485"/>
+                        </Border.Background>
+                        <local:TimeMissedControl />
+                    </Border>
+                </Viewbox>
+
+            </StackPanel>
+        </Grid>
+    </Border>
+</Page>

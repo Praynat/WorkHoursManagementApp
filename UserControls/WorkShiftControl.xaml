@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="WorkHoursManagementApp.UserControls.WorkShiftControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="120" d:DesignWidth="300">
+    <Grid Background="White" Height="100" >
+       
+        <StackPanel Orientation="Vertical" Height="80" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <StackPanel Orientation="Horizontal" Height="35">
+                <TextBlock Text="Start Time:" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <xctk:TimePicker Value="{Binding StartTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Height="35" Background="White">
+                <TextBlock Text="End  Time: " FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                <xctk:TimePicker Value="{Binding EndTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
