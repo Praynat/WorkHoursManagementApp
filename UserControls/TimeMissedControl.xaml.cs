@@ -1,28 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WorkHoursManagementApp.UserControls
 {
-    /// <summary>
-    /// Interaction logic for TimeMissedControl.xaml
-    /// </summary>
+    
     public partial class TimeMissedControl : UserControl
     {
+        public DateTime TimeMissed
+        {
+            get { return (DateTime)GetValue(TimeMissedProperty); }
+            set { SetValue(TimeMissedProperty, value); }
+        }
+
+        public static readonly DependencyProperty TimeMissedProperty =
+            DependencyProperty.Register("TimeMissed", typeof(DateTime), typeof(TimeMissedControl), new PropertyMetadata(DateTime.Now));
+
         public TimeMissedControl()
         {
             InitializeComponent();
+            this.DataContext = this;
+
+            
+            TimeMissed = DateTime.Today.AddHours(0);
         }
     }
 }

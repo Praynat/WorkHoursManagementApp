@@ -6,9 +6,9 @@ namespace WorkHoursManagementApp.Models
 {
     public class ExtraTimeData : INotifyPropertyChanged
     {
-        private TimeSpan _extraTime;
+        private DateTime _extraTime;
 
-        public TimeSpan ExtraTime
+        public DateTime ExtraTime
         {
             get => _extraTime;
             set
@@ -30,13 +30,17 @@ namespace WorkHoursManagementApp.Models
 
         public ExtraTimeData()
         {
-            ExtraTime = TimeSpan.Zero;
+            ExtraTime = DateTime.Today;
         }
 
-        public ExtraTimeData(TimeSpan extraTime)
+        public ExtraTimeData(DateTime extraTime)
         {
             ExtraTime = extraTime;
         }
+
+        public TimeSpan GetExtraTimeDuration()
+        {
+            return ExtraTime.TimeOfDay;
+        }
     }
 }
-

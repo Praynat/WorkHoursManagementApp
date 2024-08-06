@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace WorkHoursManagementApp.UserControls
 {
-    /// <summary>
-    /// Interaction logic for WorkShiftControl.xaml
-    /// </summary>
+   
     public partial class WorkShiftControl : UserControl
     {
         public DateTime StartTime

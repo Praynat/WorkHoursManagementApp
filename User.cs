@@ -29,7 +29,7 @@ namespace WorkHoursManagementApp
                     {
                         workYear.DailyWorkHoursList.Add(new DailyWorkHours
                         {
-                            Date = date,
+                            Date = DateOnly.FromDateTime(date),
                             WorkShift = new Models.WorkShiftData { StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) }
                         });
                     }
@@ -45,17 +45,21 @@ namespace WorkHoursManagementApp
 
         public WorkYear GetWorkYear(DateTime date)
         {
-            return WorkYearsList.FirstOrDefault(wy => wy.ContainsDate(date));
+            var dateOnly = DateOnly.FromDateTime(date); // Convert DateTime to DateOnly for comparison
+            return WorkYearsList.FirstOrDefault(wy => wy.ContainsDate(dateOnly));
         }
 
         public TimeSpan GetTotalWorkHoursFromDates(DateTime startDate, DateTime endDate)
         {
             TimeSpan totalHours = TimeSpan.Zero;
 
+            DateOnly start = DateOnly.FromDateTime(startDate); // Convert to DateOnly
+            DateOnly end = DateOnly.FromDateTime(endDate);     // Convert to DateOnly
+
             foreach (WorkYear workYear in WorkYearsList)
             {
                 IEnumerable<DailyWorkHours> relevantDays = workYear.DailyWorkHoursList
-                    .Where(dwh => dwh.Date >= startDate && dwh.Date <= endDate);
+                    .Where(dwh => dwh.Date >= start && dwh.Date <= end); // Use DateOnly for comparison
 
                 foreach (DailyWorkHours day in relevantDays)
                 {

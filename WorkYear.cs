@@ -19,10 +19,12 @@ namespace WorkHoursManagementApp
 
         public bool Overlaps(DateTime startDate, DateTime endDate)
         {
-            return DailyWorkHoursList.Any(dwh => dwh.Date >= startDate && dwh.Date <= endDate);
+            DateOnly start = DateOnly.FromDateTime(startDate);
+            DateOnly end = DateOnly.FromDateTime(endDate);
+            return DailyWorkHoursList.Any(dwh => dwh.Date >= start && dwh.Date <= end);
         }
 
-        public bool ContainsDate(DateTime date)
+        public bool ContainsDate(DateOnly date)
         {
             return DailyWorkHoursList.Any(dwh => dwh.Date == date);
         }

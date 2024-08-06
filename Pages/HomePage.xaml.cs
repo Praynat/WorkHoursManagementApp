@@ -42,7 +42,10 @@ namespace WorkHoursManagementApp.Pages
             WorkYear workYear = currentUser.GetWorkYear(selectedDate);
             if (workYear != null)
             {
-                DailyWorkHours workDay = workYear.DailyWorkHoursList.Find(dwh => dwh.Date.Date == selectedDate.Date);
+                DateOnly selectedDateOnly = DateOnly.FromDateTime(selectedDate);
+
+                DailyWorkHours workDay = workYear.DailyWorkHoursList.Find(dwh => dwh.Date == selectedDateOnly);
+                
                 if (workDay != null)
                 {
                     Items.Add(workDay.WorkShift);

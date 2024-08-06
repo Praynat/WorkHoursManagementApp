@@ -6,9 +6,9 @@ namespace WorkHoursManagementApp.Models
 {
     public class TimeMissedData : INotifyPropertyChanged
     {
-        private TimeSpan _timeMissed;
+        private DateTime _timeMissed;
 
-        public TimeSpan TimeMissed
+        public DateTime TimeMissed
         {
             get => _timeMissed;
             set
@@ -30,12 +30,16 @@ namespace WorkHoursManagementApp.Models
 
         public TimeMissedData()
         {
-            TimeMissed = TimeSpan.Zero;
+            TimeMissed = DateTime.Today;
         }
 
-        public TimeMissedData(TimeSpan timeMissed)
+        public TimeMissedData(DateTime timeMissed)
         {
             TimeMissed = timeMissed;
+        }
+        public TimeSpan GetTimeMissedDuration()
+        {
+            return TimeMissed.TimeOfDay;
         }
     }
 
