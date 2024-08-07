@@ -9,15 +9,17 @@
     <Grid Background="White" Height="100" >
 
         <StackPanel Orientation="Vertical" Height="80" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center">
-
+            <TextBlock HorizontalAlignment="Center" FontSize="16" FontFamily="Aharoni" FontWeight="Bold" FontStretch="Condensed" Margin="0,0,0,0" Text="Daily Workshift"/>
             <StackPanel Orientation="Horizontal" Height="35">
                 <TextBlock Text="Start Time:" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                <xctk:TimePicker Value="{Binding StartTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
+                <xctk:TimePicker x:Name="startTimePicker"
+                                 Value="{Binding StartTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Height="35" Background="White">
                 <TextBlock Text="End  Time: " FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                <xctk:TimePicker Value="{Binding EndTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
+                <xctk:TimePicker x:Name="endTimePicker"
+                                 Value="{Binding EndTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged }" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
             </StackPanel>
 
         </StackPanel>

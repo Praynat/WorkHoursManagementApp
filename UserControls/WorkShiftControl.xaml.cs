@@ -45,5 +45,14 @@ namespace WorkHoursManagementApp.UserControls
 
 
         }
+        public void SetStartTime(DateTime newTime)
+        {
+            StartTime = newTime;
+        }
+
+        public void SetEndTime(DateTime newTime)
+        {
+            EndTime = newTime;
+        }
     }
 }

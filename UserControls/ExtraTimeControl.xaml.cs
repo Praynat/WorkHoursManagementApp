@@ -24,5 +24,10 @@ namespace WorkHoursManagementApp.UserControls
             
             ExtraTime = DateTime.Today.AddHours(0);
         }
+
+        public void SetExtraTime(DateTime newTime)
+        {
+            ExtraTime = newTime;
+        }
     }
 }

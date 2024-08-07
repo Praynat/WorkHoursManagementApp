@@ -5,11 +5,11 @@ namespace WorkHoursManagementApp.Models
 {
     public class WorkShiftData : INotifyPropertyChanged
     {
-        private TimeSpan _startTime;
-        private TimeSpan _endTime;
+        private DateTime _startTime;
+        private DateTime _endTime;
         private DateOnly _date;
 
-        public TimeSpan StartTime
+        public DateTime StartTime
         {
             get => _startTime;
             set
@@ -22,7 +22,7 @@ namespace WorkHoursManagementApp.Models
             }
         }
 
-        public TimeSpan EndTime
+        public DateTime EndTime
         {
             get => _endTime;
             set
@@ -58,11 +58,11 @@ namespace WorkHoursManagementApp.Models
         public WorkShiftData()
         {
             Date = DateOnly.FromDateTime(DateTime.Today);
-            StartTime = new TimeSpan(9, 0, 0);
-            EndTime = new TimeSpan(17, 0, 0);
+            StartTime = DateTime.Today.AddHours(9);
+            EndTime = DateTime.Today.AddHours(17);
         }
 
-        public WorkShiftData(TimeSpan startTime, TimeSpan endTime, DateOnly date)
+        public WorkShiftData(DateTime startTime, DateTime endTime, DateOnly date)
         {
             StartTime = startTime;
             EndTime = endTime;

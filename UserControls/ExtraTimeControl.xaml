@@ -8,8 +8,8 @@
              d:DesignHeight="60" d:DesignWidth="300">
     <Grid Background="White">
         <StackPanel Orientation="Horizontal" Height="35" Margin="0,0,0,0" HorizontalAlignment="Center">
-            <TextBlock Text="Extra Time:" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-            <xctk:TimePicker Value="{Binding ExtraTime, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center" StartTime="00:00"/>
+            <TextBlock Text="Extra Hours:" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
+            <xctk:TimePicker x:Name="extraTimePicker" Value="{Binding ExtraTime, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center" StartTime="00:00"/>
 
         </StackPanel>
     </Grid>

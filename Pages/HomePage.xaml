@@ -17,7 +17,7 @@
 
             <!-- Calendar Section -->
             <Viewbox>
-                <Calendar Name="myCalendar" 
+                <Calendar x:Name="myCalendar"
                       BorderThickness="2" 
                       BorderBrush="Black"
                        HorizontalAlignment="Stretch"
@@ -28,12 +28,13 @@
             <!-- Information Section -->
             <StackPanel Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
 
+                
                 <Viewbox>
                     <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
                         <Border.Background>
                             <SolidColorBrush Color="#FF72DFD9" Opacity="0.5"/>
                         </Border.Background>
-                        <local:WorkShiftControl />
+                        <local:WorkShiftControl x:Name="workShiftControl"/>
                     </Border>
                 </Viewbox>
 
@@ -42,7 +43,7 @@
                         <Border.Background>
                             <SolidColorBrush Color="#FFADE6B7" Opacity="0.5"/>
                         </Border.Background>
-                        <local:ExtraTimeControl />
+                        <local:ExtraTimeControl x:Name="extraTimeControl"/>
                     </Border>
                 </Viewbox>
 
@@ -51,7 +52,7 @@
                         <Border.Background>
                             <SolidColorBrush Color="#FFE98B99" Opacity="0.485"/>
                         </Border.Background>
-                        <local:TimeMissedControl />
+                        <local:TimeMissedControl x:Name="timeMissedControl"/>
                     </Border>
                 </Viewbox>
 

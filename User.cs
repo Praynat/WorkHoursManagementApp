@@ -30,7 +30,7 @@ namespace WorkHoursManagementApp
                         workYear.DailyWorkHoursList.Add(new DailyWorkHours
                         {
                             Date = DateOnly.FromDateTime(date),
-                            WorkShift = new Models.WorkShiftData { StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(17, 0, 0) }
+                            WorkShift = new Models.WorkShiftData { StartTime = DateTime.Today.AddHours(9), EndTime = DateTime.Today.AddHours(17) }
                         });
                     }
                 }

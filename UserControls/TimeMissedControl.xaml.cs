@@ -24,5 +24,10 @@ namespace WorkHoursManagementApp.UserControls
             
             TimeMissed = DateTime.Today.AddHours(0);
         }
+
+        public void SetMissedTime(DateTime newTime)
+        {
+            TimeMissed = newTime;
+        }
     }
 }
