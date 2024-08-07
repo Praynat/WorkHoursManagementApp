@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Animation;
 using WorkHoursManagementApp.Models;
 using WorkHoursManagementApp.Utilities;
 using Xceed.Wpf.Toolkit;
@@ -32,10 +35,14 @@ namespace WorkHoursManagementApp.Pages
 
         private void HomePage_Loaded(object sender, RoutedEventArgs e)
         {
+            //Utility Functions that defines blackout dates and a function that returns a DailyWorkHours by date
             CalendarUtility.InitializeCalendar(myCalendar, WorkYearStartDate, WorkYearEndDate);
+
+            //Attaches Functions to time picker events
             AttachTimePickerEventHandlers();
         }
 
+        //Attaches Functions to time picker events
         private void AttachTimePickerEventHandlers()
         {
             AttachValueChangedHandler(workShiftControl, "startTimePicker", StartTimePicker_ValueChanged);
@@ -52,6 +59,7 @@ namespace WorkHoursManagementApp.Pages
             }
         }
 
+        //Updates the data when time is changed by user
         private void StartTimePicker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             UpdateWorkShiftTime(sender, e, true);
@@ -62,6 +70,7 @@ namespace WorkHoursManagementApp.Pages
             UpdateWorkShiftTime(sender, e, false);
         }
 
+        //Updates the data when time is changed by user
         private void UpdateWorkShiftTime(object sender, RoutedPropertyChangedEventArgs<object> e, bool isStartTime)
         {
             if (e.NewValue is DateTime newTime && myCalendar.SelectedDate.HasValue)
@@ -81,13 +90,14 @@ namespace WorkHoursManagementApp.Pages
             }
         }
 
+        //Complementary function that Updates the data when time is changed by user
         private void UpdateTime(WorkShiftData workShift, DateTime newTime, bool isStartTime, object sender)
         {
             if (isStartTime)
             {
-                if (newTime >= workShift.EndTime)
+                if (newTime > workShift.EndTime)
                 {
-                    System.Windows.MessageBox.Show("Start Time cannot be greater than or equal to End Time. Resetting to End Time.");
+                    System.Windows.MessageBox.Show("Start Time cannot be greater than End Time. Resetting to End Time.");
                     workShift.StartTime = workShift.EndTime;
                     SetTimePickerValue(sender, workShift.EndTime);
                 }
@@ -98,9 +108,9 @@ namespace WorkHoursManagementApp.Pages
             }
             else
             {
-                if (newTime <= workShift.StartTime)
+                if (newTime < workShift.StartTime)
                 {
-                    System.Windows.MessageBox.Show("End Time cannot be earlier than or equal to Start Time. Resetting to Start Time.");
+                    System.Windows.MessageBox.Show("End Time cannot be smaller than Start Time. Resetting to Start Time.");
                     workShift.EndTime = workShift.StartTime;
                     SetTimePickerValue(sender, workShift.StartTime);
                 }
@@ -110,7 +120,7 @@ namespace WorkHoursManagementApp.Pages
                 }
             }
         }
-
+        //Complementary method for previous Update time method
         private void SetTimePickerValue(object sender, DateTime time)
         {
             if (sender is TimePicker timePicker)
@@ -147,6 +157,7 @@ namespace WorkHoursManagementApp.Pages
             }
         }
 
+        //Update the time showing up in time pickers when selecting a date
         private void MyCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
             if (myCalendar.SelectedDate.HasValue)
@@ -170,6 +181,44 @@ namespace WorkHoursManagementApp.Pages
                 extraTimeControl.SetExtraTime(workDay.ExtraTime.ExtraTime);
                 timeMissedControl.SetMissedTime(workDay.MissedTime.TimeMissed);
             }
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (MenuPanel.Visibility == Visibility.Visible)
+            {
+                
+                if (!MenuPanel.IsMouseOver)
+                {
+                    CloseMenu();
+                }
+            }
+        }
+
+        private void ToggleMenu(object sender, RoutedEventArgs e)
+        {
+            if (MenuPanel.Visibility == Visibility.Collapsed)
+            {
+                OpenMenu();
+            }
+            else
+            {
+                CloseMenu();
+            }
+        }
+
+        private void OpenMenu()
+        {
+            MenuPanel.Visibility = Visibility.Visible;
+            Storyboard openMenuAnimation = (Storyboard)FindResource("OpenMenuAnimation");
+            openMenuAnimation.Begin();
+        }
+
+        private void CloseMenu()
+        {
+            Storyboard closeMenuAnimation = (Storyboard)FindResource("CloseMenuAnimation");
+            closeMenuAnimation.Completed += (s, _) => MenuPanel.Visibility = Visibility.Collapsed;
+            closeMenuAnimation.Begin();
         }
     }
 }

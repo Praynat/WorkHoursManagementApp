@@ -8,55 +8,87 @@
       mc:Ignorable="d" 
       d:DesignHeight="453.2" d:DesignWidth="809.6"
       Title="HomePage">
-    <Border Padding="30" Background="White">
-        <Grid Background="White" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*" />
-                <ColumnDefinition Width="4*" />
-            </Grid.ColumnDefinitions>
+    <Page.Resources>
+        <Storyboard x:Key="OpenMenuAnimation">
+            <DoubleAnimation Storyboard.TargetName="MenuTransform"
+                             Storyboard.TargetProperty="X"
+                             To="0"
+                             Duration="0:0:0.3" />
+        </Storyboard>
+        <Storyboard x:Key="CloseMenuAnimation">
+            <DoubleAnimation Storyboard.TargetName="MenuTransform"
+                             Storyboard.TargetProperty="X"
+                             To="200"
+                             Duration="0:0:0.3" />
+        </Storyboard>
+    </Page.Resources>
 
-            <!-- Calendar Section -->
-            <Viewbox>
-                <Calendar x:Name="myCalendar"
-                      BorderThickness="2" 
-                      BorderBrush="Black"
-                       HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      Margin="10" />
-            </Viewbox>
-
-            <!-- Information Section -->
-            <StackPanel Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                
-                <Viewbox>
-                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
-                        <Border.Background>
-                            <SolidColorBrush Color="#FF72DFD9" Opacity="0.5"/>
-                        </Border.Background>
-                        <local:WorkShiftControl x:Name="workShiftControl"/>
-                    </Border>
-                </Viewbox>
+    <Grid MouseDown="Grid_MouseDown">
+        <!-- Main Content -->
+        <Border Padding="30" Background="White">
+            <Grid Background="White">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
 
                 <Viewbox>
-                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
-                        <Border.Background>
-                            <SolidColorBrush Color="#FFADE6B7" Opacity="0.5"/>
-                        </Border.Background>
-                        <local:ExtraTimeControl x:Name="extraTimeControl"/>
-                    </Border>
+                    <Calendar x:Name="myCalendar"
+                              BorderThickness="2" 
+                              BorderBrush="Black"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              Margin="10" />
                 </Viewbox>
 
-                <Viewbox>
-                    <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
-                        <Border.Background>
-                            <SolidColorBrush Color="#FFE98B99" Opacity="0.485"/>
-                        </Border.Background>
-                        <local:TimeMissedControl x:Name="timeMissedControl"/>
-                    </Border>
-                </Viewbox>
+                <StackPanel Grid.Column="1" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Viewbox>
+                        <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
+                            <Border.Background>
+                                <SolidColorBrush Color="#FF72DFD9" Opacity="0.5"/>
+                            </Border.Background>
+                            <local:WorkShiftControl x:Name="workShiftControl"/>
+                        </Border>
+                    </Viewbox>
 
-            </StackPanel>
-        </Grid>
-    </Border>
+                    <Viewbox>
+                        <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
+                            <Border.Background>
+                                <SolidColorBrush Color="#FFADE6B7" Opacity="0.5"/>
+                            </Border.Background>
+                            <local:ExtraTimeControl x:Name="extraTimeControl"/>
+                        </Border>
+                    </Viewbox>
+
+                    <Viewbox>
+                        <Border BorderThickness="1" BorderBrush="Black" CornerRadius="5" Margin="5" Padding="10">
+                            <Border.Background>
+                                <SolidColorBrush Color="#FFE98B99" Opacity="0.485"/>
+                            </Border.Background>
+                            <local:TimeMissedControl x:Name="timeMissedControl"/>
+                        </Border>
+                    </Viewbox>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Sliding Menu Panel -->
+        <StackPanel x:Name="MenuPanel" Width="200" Background="White"
+                    VerticalAlignment="Stretch"
+                    Visibility="Visible"
+                    RenderTransformOrigin="0.5,0" HorizontalAlignment="Right">
+            <StackPanel.RenderTransform>
+                <TranslateTransform x:Name="MenuTransform" X="200"/>
+            </StackPanel.RenderTransform>
+            <TextBlock FontSize="20" FontFamily="Aharoni" FontWeight="Bold" FontStretch="Condensed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,20">Options</TextBlock>
+            <Button Content="Change Weekly Planning" Margin="10"/>
+            <Button Content="Show Summary by dates" Margin="10"/>
+            <Button Content="Set Work Year" Margin="10"/>
+        </StackPanel>
+
+        <!-- Toggle Menu Button -->
+        <Button Content="☰" FontSize="20" Width="30" Height="30"
+                VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10"
+                Click="ToggleMenu" Background="White" />
+    </Grid>
 </Page>
