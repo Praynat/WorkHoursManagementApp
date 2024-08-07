@@ -8,12 +8,12 @@ namespace WorkHoursManagementApp
 {
     public class WorkYear
     {
-        public int Year { get; set; }
+        public string YearName { get; set; }
         public List<DailyWorkHours> DailyWorkHoursList { get; set; }
 
-        public WorkYear(int year)
+        public WorkYear(string yearName)
         {
-            Year = year;
+            YearName = yearName;
             DailyWorkHoursList = new List<DailyWorkHours>();
         }
 
@@ -33,7 +33,18 @@ namespace WorkHoursManagementApp
         {
             return DailyWorkHoursList.Aggregate(TimeSpan.Zero, (sum, dwh) => sum + dwh.GetTotalWorkHours());
         }
-    }
+        
+        public double WorkHoursSumByDate(DateTime startDate, DateTime endDate)
+        {
+            DateOnly start = DateOnly.FromDateTime(startDate);
+            DateOnly end = DateOnly.FromDateTime(endDate);
 
+            TimeSpan totalWorkHours = DailyWorkHoursList
+                .Where(dwh => dwh.Date >= start && dwh.Date <= end)
+                .Aggregate(TimeSpan.Zero, (sum, dwh) => sum + dwh.GetTotalWorkHours());
+
+            return totalWorkHours.TotalHours;
+        }
+    }
 
 }

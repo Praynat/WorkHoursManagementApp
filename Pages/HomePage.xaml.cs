@@ -16,6 +16,7 @@ namespace WorkHoursManagementApp.Pages
         private User currentUser;
         public DateTime WorkYearStartDate { get; set; } = new DateTime(2023, 9, 1);
         public DateTime WorkYearEndDate { get; set; } = new DateTime(2024, 7, 30);
+        public string WorkYearName { get; set; } = "Yeshivat Noam 2023-2024";
 
         public ObservableCollection<DailyWorkHours> DailyWorkHoursItems { get; set; }
 
@@ -25,7 +26,7 @@ namespace WorkHoursManagementApp.Pages
             DataContext = this;
 
             currentUser = new User("Nathan");
-            currentUser.AddWorkYear(WorkYearStartDate, WorkYearEndDate);
+            currentUser.AddWorkYear(WorkYearStartDate, WorkYearEndDate, "Yeshivat Noam 2023-2024");
 
             DailyWorkHoursItems = new ObservableCollection<DailyWorkHours>();
 
@@ -219,6 +220,16 @@ namespace WorkHoursManagementApp.Pages
             Storyboard closeMenuAnimation = (Storyboard)FindResource("CloseMenuAnimation");
             closeMenuAnimation.Completed += (s, _) => MenuPanel.Visibility = Visibility.Collapsed;
             closeMenuAnimation.Begin();
+        }
+
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            DateTime firstDate= new DateTime(2023, 9, 1);
+            DateTime lastDate = new DateTime(2023, 10, 1);
+            WorkYear selectedWorkYear = currentUser.GetWorkYearByName("Yeshivat Noam 2023-2024");
+            double totalHours=selectedWorkYear.WorkHoursSumByDate(firstDate, lastDate);
+            System.Windows.MessageBox.Show($"Total work hours for {selectedWorkYear.YearName} from {firstDate:d} to {lastDate:d}: {totalHours} hours");
         }
     }
 }

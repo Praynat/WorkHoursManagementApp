@@ -34,5 +34,23 @@ namespace WorkHoursManagementApp.Utilities
             }
             return null;
         }
+
+        public static List<DailyWorkHours> GetWorkDaysForPeriod(User currentUser, DateTime startDate, DateTime endDate)
+        {
+            List<DailyWorkHours> workDays = new List<DailyWorkHours>();
+
+            DateOnly start = DateOnly.FromDateTime(startDate);
+            DateOnly end = DateOnly.FromDateTime(endDate);
+
+            foreach (var workYear in currentUser.WorkYearsList)
+            {
+                var relevantDays = workYear.DailyWorkHoursList
+                    .Where(dwh => dwh.Date >= start && dwh.Date <= end);
+
+                workDays.AddRange(relevantDays);
+            }
+
+            return workDays;
+        }
     }
 }

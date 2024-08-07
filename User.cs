@@ -17,11 +17,11 @@ namespace WorkHoursManagementApp
             WorkYearsList = new List<WorkYear>();
         }
 
-        public void AddWorkYear(DateTime startDate, DateTime endDate)
+        public void AddWorkYear(DateTime startDate, DateTime endDate,string YearName)
         {
             if (!WorkYearsList.Any(wy => wy.Overlaps(startDate, endDate)))
             {
-                WorkYear workYear = new WorkYear(startDate.Year);
+                WorkYear workYear = new WorkYear(YearName);
 
                 for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                 {
@@ -47,6 +47,11 @@ namespace WorkHoursManagementApp
         {
             var dateOnly = DateOnly.FromDateTime(date); // Convert DateTime to DateOnly for comparison
             return WorkYearsList.FirstOrDefault(wy => wy.ContainsDate(dateOnly));
+        }
+
+        public WorkYear GetWorkYearByName(string yearName)
+        {
+            return WorkYearsList.FirstOrDefault(wy => wy.YearName == yearName);
         }
 
         public TimeSpan GetTotalWorkHoursFromDates(DateTime startDate, DateTime endDate)
