@@ -3,9 +3,12 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using WorkHoursManagementApp.Models;
+using WorkHoursManagementApp.UserControls;
 using WorkHoursManagementApp.Utilities;
 using Xceed.Wpf.Toolkit;
 
@@ -14,33 +17,40 @@ namespace WorkHoursManagementApp.Pages
     public partial class HomePage : Page
     {
         private User currentUser;
-        public DateTime WorkYearStartDate { get; set; } = new DateTime(2023, 9, 1);
-        public DateTime WorkYearEndDate { get; set; } = new DateTime(2024, 7, 30);
-        public string WorkYearName { get; set; } = "Yeshivat Noam 2023-2024";
-
+        
         public ObservableCollection<DailyWorkHours> DailyWorkHoursItems { get; set; }
+        private List<DateTime> allBlackoutDates;
+        private WorkYear CurrentWorkYear { get; set; }
 
         public HomePage()
         {
             InitializeComponent();
             DataContext = this;
 
+            //creating user and workyear
             currentUser = new User("Nathan");
-            currentUser.AddWorkYear(WorkYearStartDate, WorkYearEndDate, "Yeshivat Noam 2023-2024");
 
+            currentUser.AddWorkYear(new DateTime(2023, 9, 1), new DateTime(2024, 7, 31), "Yeshivat Noam 2023-2024");
+            currentUser.AddWorkYear(new DateTime(2022, 10, 1), new DateTime(2023, 8, 30), "Yeshivat Noam 2022-2023");
+            currentUser.AddWorkYear(new DateTime(2021, 11, 1), new DateTime(2022, 9, 30), "Yeshivat Noam 2021-2022");
+
+            //Methods passed on from the ChooseWorkYear Control for choosing and adding WorkYears
+            ChooseWorkYearControl.LoadWorkYears(currentUser.WorkYearsList);
+            ChooseWorkYearControl.WorkYearChanged += ChooseWorkYear_WorkYearChanged;
+            ChooseWorkYearControl.WorkYearDeleted+= ChooseWorkYear_WorkYearDeleted;
+
+            ChooseWorkYearControl.AddYearPopupOkClicked += OnNewWorkYearAdded;
+
+
+            //Takes in hand the basic function of updating the workhours
             DailyWorkHoursItems = new ObservableCollection<DailyWorkHours>();
-
             myCalendar.SelectedDatesChanged += MyCalendar_SelectedDatesChanged;
-            Loaded += HomePage_Loaded;
-        }
-
-        private void HomePage_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Utility Functions that defines blackout dates and a function that returns a DailyWorkHours by date
-            CalendarUtility.InitializeCalendar(myCalendar, WorkYearStartDate, WorkYearEndDate);
-
-            //Attaches Functions to time picker events
             AttachTimePickerEventHandlers();
+
+            //Takes in hand the summary popup
+            var dateRangeSelector = new DateRangeSelector();
+            dateRangeSelector.DatesSelected += DateRangeSelector_DatesSelected;
+            DateRangePopup.Child = dateRangeSelector;
         }
 
         //Attaches Functions to time picker events
@@ -158,14 +168,18 @@ namespace WorkHoursManagementApp.Pages
             }
         }
 
+
         //Update the time showing up in time pickers when selecting a date
         private void MyCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
             if (myCalendar.SelectedDate.HasValue)
             {
+
                 DateTime selectedDate = myCalendar.SelectedDate.Value;
                 UpdateItemsForSelectedDate(selectedDate);
+
             }
+
         }
 
         private void UpdateItemsForSelectedDate(DateTime selectedDate)
@@ -223,13 +237,106 @@ namespace WorkHoursManagementApp.Pages
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ShowSummaryButton_Click(object sender, RoutedEventArgs e)
         {
-            DateTime firstDate= new DateTime(2023, 9, 1);
-            DateTime lastDate = new DateTime(2023, 10, 1);
-            WorkYear selectedWorkYear = currentUser.GetWorkYearByName("Yeshivat Noam 2023-2024");
-            double totalHours=selectedWorkYear.WorkHoursSumByDate(firstDate, lastDate);
-            System.Windows.MessageBox.Show($"Total work hours for {selectedWorkYear.YearName} from {firstDate:d} to {lastDate:d}: {totalHours} hours");
+            var dateRangeSelector = DateRangePopup.Child as DateRangeSelector;
+            if (dateRangeSelector != null)
+            {
+                dateRangeSelector.SetDefaultDateRange(myCalendar.DisplayDate);
+            }
+            DateRangePopup.IsOpen = true;
+        }
+
+        private void DateRangeSelector_DatesSelected(DateTime? startDate, DateTime? endDate)
+        {
+                
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                if (CurrentWorkYear != null)
+                {
+                    double totalHours = CurrentWorkYear.WorkHoursSumByDate(startDate.Value, endDate.Value);
+
+                    SummaryPopupControl.TotalHours = totalHours;
+                    SummaryPopupControl.StartDate = startDate.Value.ToString("d");
+                    SummaryPopupControl.EndDate = endDate.Value.ToString("d");
+                    SummaryPopupControl.HourlyRate = 20.0; 
+
+                    SummaryPopup.IsOpen = true;
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Work year not found.");
+                }
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Invalid date selection.");
+            }
+        }
+
+        private void ChangeWorkYearButton_Click(object sender, RoutedEventArgs e)
+        {
+            ChooseWorkYearPopup.IsOpen = true;
+        }
+        private void ChooseWorkYear_WorkYearChanged(WorkYear selectedWorkYear)
+        {
+            ApplyCurrentWorkYear(selectedWorkYear);
+            CurrentWorkYear = selectedWorkYear;
+        }
+        private void ApplyCurrentWorkYear(WorkYear currentWorkYear)
+        {
+                  
+            DateTime workYearStartDate = currentWorkYear.WorkYearStartDate;
+            DateTime workYearEndDate = currentWorkYear.WorkYearEndDate;
+
+            //Defines Calendar start and end dates
+            myCalendar.DisplayDateStart = workYearStartDate;
+            myCalendar.DisplayDateEnd = workYearEndDate;
+            myCalendar.SelectedDate = (DateTime.Today >= workYearStartDate && DateTime.Today <= workYearEndDate) ? DateTime.Today : workYearStartDate;
+
+            //Defines Dates to Blockout
+            allBlackoutDates = CalendarUtility.GetBlackoutDates(myCalendar, workYearStartDate, workYearEndDate);
+            CalendarUtility.HighlightBlackoutDates(myCalendar, allBlackoutDates);
+            CalendarUtility.UpdateCalendarStyle(myCalendar, allBlackoutDates);
+
+            ChooseWorkYearPopup.IsOpen=false;
+        }
+
+        private void ChooseWorkYear_WorkYearDeleted(WorkYear selectedWorkYear)
+        {
+            currentUser.WorkYearsList.Remove(selectedWorkYear);
+            string message = $"The work year '{selectedWorkYear.WorkYearName}' has been deleted.";
+
+            // Update the calendar based on the remaining work years
+            if (currentUser.WorkYearsList.Count > 0)
+            {
+                // Apply the first available work year
+                WorkYear currentWorkYear = currentUser.WorkYearsList[0];
+                ApplyCurrentWorkYear(currentWorkYear);
+
+                // Add information about the new year being displayed to the message
+                message += $"\nThe calendar will now show the work year '{currentWorkYear.WorkYearName}'.";
+            }
+            else
+            {
+                // No work years left, reset the calendar
+                myCalendar.DisplayDateStart = null;
+                myCalendar.DisplayDateEnd = null;
+                myCalendar.SelectedDate = null;
+
+                // Add information about the calendar reset to the message
+                message += "\nNo work years available. The calendar has been reset.";
+            }
+
+            // Show the combined message
+            System.Windows.MessageBox.Show(message, "Year Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void OnNewWorkYearAdded(WorkYear newWorkYear)
+        {
+            currentUser.AddWorkYear(newWorkYear.WorkYearStartDate, newWorkYear.WorkYearEndDate,newWorkYear.WorkYearName);
+            //ChooseWorkYearControl.LoadWorkYears(currentUser.WorkYearsList);
         }
     }
-}
+
+    }
+

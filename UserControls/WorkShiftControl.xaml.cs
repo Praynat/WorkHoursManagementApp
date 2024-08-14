@@ -35,6 +35,8 @@ namespace WorkHoursManagementApp.UserControls
 
         public static readonly DependencyProperty EndTimeProperty =
             DependencyProperty.Register("EndTime", typeof(DateTime), typeof(WorkShiftControl), new PropertyMetadata(DateTime.Now));
+        
+
         public WorkShiftControl()
         {
             InitializeComponent();

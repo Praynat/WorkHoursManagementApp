@@ -1,32 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 namespace WorkHoursManagementApp.Utilities
 {
     public static class CalendarUtility
     {
-        public static void InitializeCalendar(Calendar calendar, DateTime workYearStartDate, DateTime workYearEndDate)
+        public static List<DateTime> GetBlackoutDates(Calendar calendar, DateTime workYearStartDate, DateTime workYearEndDate, DayOfWeek dayOfWeek=DayOfWeek.Saturday)
         {
             calendar.BlackoutDates.Clear();
-            calendar.BlackoutDates.Add(new CalendarDateRange(DateTime.MinValue, workYearStartDate.AddDays(-1)));
-            calendar.BlackoutDates.Add(new CalendarDateRange(workYearEndDate.AddDays(1), DateTime.MaxValue));
+
+            List<DateTime> allBlackoutDates = new List<DateTime>();
 
             for (DateTime date = workYearStartDate; date <= workYearEndDate; date = date.AddDays(1))
             {
-                if (date.DayOfWeek == DayOfWeek.Saturday)
+                if (date.DayOfWeek == dayOfWeek)
                 {
-                    calendar.BlackoutDates.Add(new CalendarDateRange(date));
+                    allBlackoutDates.Add(date);
+                }
+            }
+
+            return allBlackoutDates;
+        }
+
+        public static void HighlightBlackoutDates(Calendar calendar, List<DateTime> blackoutDates)
+        {
+            calendar.DisplayDateChanged += (s, e) =>
+            {
+                UpdateCalendarStyle(calendar, blackoutDates);
+            };
+        }
+
+        public static void UpdateCalendarStyle(Calendar calendar, List<DateTime> blackoutDates)
+        {
+            foreach (var dayButton in FindVisualChildren<CalendarDayButton>(calendar))
+            {
+                DateTime date;
+                if (DateTime.TryParse(dayButton.DataContext.ToString(), out date))
+                {
+                    dayButton.Tag = blackoutDates.Contains(date);
+                }
+            }
+        }
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
                 }
             }
         }
 
         public static DailyWorkHours GetWorkDayForDate(User currentUser, DateTime selectedDate)
         {
-            WorkYear workYear = currentUser.GetWorkYear(selectedDate);
+            WorkYear workYear = currentUser.GetWorkYearByDate(selectedDate);
             if (workYear != null)
             {
                 DateOnly selectedDateOnly = DateOnly.FromDateTime(selectedDate);

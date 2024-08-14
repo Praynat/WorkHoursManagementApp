@@ -8,12 +8,17 @@ namespace WorkHoursManagementApp
 {
     public class WorkYear
     {
+        public DateTime WorkYearStartDate { get; set; }
+        public DateTime WorkYearEndDate { get; set; }
+        public string WorkYearName { get; set; }
         public string YearName { get; set; }
         public List<DailyWorkHours> DailyWorkHoursList { get; set; }
 
-        public WorkYear(string yearName)
+        public WorkYear(DateTime workYearStartDate, DateTime workYearEndDate, string workYearName)
         {
-            YearName = yearName;
+            WorkYearStartDate = workYearStartDate;
+            WorkYearEndDate = workYearEndDate;
+            WorkYearName = workYearName;
             DailyWorkHoursList = new List<DailyWorkHours>();
         }
 

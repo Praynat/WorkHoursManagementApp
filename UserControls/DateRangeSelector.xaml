@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="WorkHoursManagementApp.UserControls.DateRangeSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="300">
+    <Grid Background="White" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Margin="20">
+            <TextBlock Text="Select Date Range" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Start Date:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <DatePicker x:Name="StartDatePicker" SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="End Date: " VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <DatePicker x:Name="EndDatePicker" SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <Button Content="OK" Margin="0,10,0,0" HorizontalAlignment="Center" Width="80" Click="OkButton_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

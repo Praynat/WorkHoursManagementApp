@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="WorkHoursManagementApp.UserControls.SummaryPopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="350" d:DesignWidth="450">
+
+    <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="20" CornerRadius="10">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- Hours Summary Text -->
+            <TextBlock x:Name="HoursSummaryText" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,10" TextWrapping="Wrap"
+                       Text="{Binding Path=StartDate, StringFormat='The amount of hours you have worked from {0} to {1} is:'}"/>
+
+            <!-- Total Hours Display -->
+            <TextBlock x:Name="TotalHoursText" FontSize="48" FontWeight="Bold" Foreground="DarkBlue" TextAlignment="Center" Margin="0,10"
+                       Text="{Binding TotalHours, StringFormat={}{0:F2} hours}"/>
+
+            <!-- Hourly Rate Input -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10" HorizontalAlignment="Center">
+                <TextBlock Text="For a fee rate of: $" VerticalAlignment="Center" Margin="0,0,5,0" HorizontalAlignment="Center" FontSize="16"/>
+                <TextBox x:Name="HourlyRateTextBox" Width="80" Text="{Binding HourlyRate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0" FontSize="16" FontWeight="Bold" TextChanged="HourlyRateTextBox_TextChanged"/>
+            </StackPanel>
+            <!-- Total Salary Display -->
+            <TextBlock x:Name="TotalSalaryText" FontSize="16" FontWeight="Bold" TextAlignment="Center" Margin="0,10"
+                       Text="{Binding Salary,UpdateSourceTrigger=PropertyChanged, StringFormat='The amount of money you received is: ${0:F2}'}"/>
+
+            <!-- Close Button -->
+            <Button Content="Close" Width="100" Click="CloseButton_Click" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+        </StackPanel>
+    </Border>
+</UserControl>

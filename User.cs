@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace WorkHoursManagementApp
 {
     public class User
     {
         public string Username { get; set; }
-        public List<WorkYear> WorkYearsList { get; set; }
+        public ObservableCollection<WorkYear> WorkYearsList { get; set; }
 
         public User(string username)
         {
             Username = username;
-            WorkYearsList = new List<WorkYear>();
+            WorkYearsList = new ObservableCollection<WorkYear>();
         }
 
         public void AddWorkYear(DateTime startDate, DateTime endDate,string YearName)
-        {
-            if (!WorkYearsList.Any(wy => wy.Overlaps(startDate, endDate)))
-            {
-                WorkYear workYear = new WorkYear(YearName);
+        {         
+                     WorkYear workYear = new WorkYear(startDate,endDate,YearName);
 
                 for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                 {
@@ -36,14 +35,9 @@ namespace WorkHoursManagementApp
                 }
 
                 WorkYearsList.Add(workYear);
-            }
-            else
-            {
-                Console.WriteLine($"A work period overlapping with these dates already exists for the user {Username}.");
-            }
         }
 
-        public WorkYear GetWorkYear(DateTime date)
+        public WorkYear GetWorkYearByDate(DateTime date)
         {
             var dateOnly = DateOnly.FromDateTime(date); // Convert DateTime to DateOnly for comparison
             return WorkYearsList.FirstOrDefault(wy => wy.ContainsDate(dateOnly));
@@ -51,7 +45,7 @@ namespace WorkHoursManagementApp
 
         public WorkYear GetWorkYearByName(string yearName)
         {
-            return WorkYearsList.FirstOrDefault(wy => wy.YearName == yearName);
+            return WorkYearsList.FirstOrDefault(wy => wy.WorkYearName == yearName);
         }
 
         public TimeSpan GetTotalWorkHoursFromDates(DateTime startDate, DateTime endDate)

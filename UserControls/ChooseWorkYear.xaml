@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="WorkHoursManagementApp.UserControls.ChooseWorkYear"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WorkHoursManagementApp.UserControls"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Background="White">
+        <Viewbox>
+            <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White">
+                <TextBlock Text="User Work Years" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <ListBox x:Name="WorkYearListBox" Width="210" Height="150" Margin="0,0,0,10" SelectionMode="Single" MouseDoubleClick="ChangeWorkYearButton_Click">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding WorkYearName}" FontWeight="Bold" FontSize="14" />
+                                <TextBlock Text="{Binding WorkYearStartDate, StringFormat='Start Date: {0:MM/dd/yyyy}'}" />
+                                <TextBlock Text="{Binding WorkYearEndDate, StringFormat='End Date: {0:MM/dd/yyyy}'}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Content="Apply Work Year" Width="170" Click="ChangeWorkYearButton_Click" Margin="0,0,0,10" Background="White" BorderThickness="2" BorderBrush="#FF72DFD9"/>
+                    <Button Content="Add New Work Year" Width="170" Click="AddWorkYearButton_Click" Margin="0,0,0,10" FontSize="11" BorderBrush="#FF72DFD9" Background="White" BorderThickness="2" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <Button Content="Edit" Width="80" Background="#FFCEF9CE" Click="EditYearButton_Click" Margin="0,0,5,0" BorderBrush="PaleGreen" BorderThickness="2" />
+                        <Button Content="Delete" Width="80" Background="#FFFFD6D6" Foreground="Black" Click="DeleteButton_Click" BorderBrush="#FFFFA8A8" BorderThickness="2" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Viewbox>
+
+        <!-- Add Work Year Popup -->
+        <Popup x:Name="AddWorkYearPopup" Placement="Center" StaysOpen="False" IsOpen="False" AllowsTransparency="True">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="5">
+                <local:NewYearControl x:Name="AddWorkYearControl" />
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>
