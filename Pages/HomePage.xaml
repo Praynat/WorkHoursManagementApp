@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:Models="clr-namespace:WorkHoursManagementApp.Models"
       xmlns:local="clr-namespace:WorkHoursManagementApp.UserControls"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
       d:DesignHeight="453.2" d:DesignWidth="809.6"
       Title="HomePage">
@@ -51,7 +52,20 @@
         <Popup x:Name="SummaryPopup" Placement="Center" StaysOpen="False" AllowsTransparency="True">
             <local:SummaryPopup x:Name="SummaryPopupControl"/>
         </Popup>
-        
+        <!-- HourlyRate Popup-->
+        <Popup x:Name="HourlyRatePopup" Placement="Center" StaysOpen="False" AllowsTransparency="True">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="5">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="Hourly Rate" FontWeight="Bold" FontSize="20" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <TextBlock Text="Rate:" VerticalAlignment="Center" Width="50"/>
+                        <xctk:DecimalUpDown x:Name="HourlyRateNumericUpDown" Width="200" Minimum="0" Maximum="1000" Increment="0.1" />
+                    </StackPanel>
+                    <Button Content="OK" Width="100" HorizontalAlignment="Center" Click="HourlyRateOkButton_Click"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+
         <!-- Choose Work Year Popup -->
         <Popup x:Name="ChooseWorkYearPopup" Placement="Center" StaysOpen="False" AllowsTransparency="True" IsOpen="True">
             <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="5">
@@ -120,8 +134,9 @@
             </StackPanel.RenderTransform>
             <TextBlock FontSize="20" FontFamily="Aharoni" FontWeight="Bold" FontStretch="Condensed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,20">Options</TextBlock>
             <Button Content="Show Summary by dates" Margin="10" Click="ShowSummaryButton_Click"/>
-            <Button Content="Change Weekly Planning" Margin="10"/>
-            <Button Content="Manage Work Year" Margin="10" Click="ChangeWorkYearButton_Click"/>
+            <Button Content="Manage Work Years" Margin="10" Click="ChangeWorkYearButton_Click"/>
+            <Button Content="Manage Weekly Planning" Margin="10"/>
+            <Button Content="Change default WorkHour Fee" Margin="10" Click="WorkHourFeeButton_Click"/>
         </StackPanel>
         
 

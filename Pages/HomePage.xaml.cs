@@ -30,9 +30,9 @@ namespace WorkHoursManagementApp.Pages
             //creating user and workyear
             currentUser = new User("Nathan");
 
-            currentUser.AddWorkYear(new DateTime(2023, 9, 1), new DateTime(2024, 7, 31), "Yeshivat Noam 2023-2024");
-            currentUser.AddWorkYear(new DateTime(2022, 10, 1), new DateTime(2023, 8, 30), "Yeshivat Noam 2022-2023");
-            currentUser.AddWorkYear(new DateTime(2021, 11, 1), new DateTime(2022, 9, 30), "Yeshivat Noam 2021-2022");
+            currentUser.AddWorkYear(new DateTime(2023, 9, 1), new DateTime(2024, 7, 31), "Yeshivat Noam 2023-2024",42);
+            currentUser.AddWorkYear(new DateTime(2022, 10, 1), new DateTime(2023, 8, 30), "Yeshivat Noam 2022-2023",32);
+            currentUser.AddWorkYear(new DateTime(2021, 11, 1), new DateTime(2022, 9, 30), "Yeshivat Noam 2021-2022",31.9m);
 
             //Methods passed on from the ChooseWorkYear Control for choosing and adding WorkYears
             ChooseWorkYearControl.LoadWorkYears(currentUser.WorkYearsList);
@@ -51,6 +51,7 @@ namespace WorkHoursManagementApp.Pages
             var dateRangeSelector = new DateRangeSelector();
             dateRangeSelector.DatesSelected += DateRangeSelector_DatesSelected;
             DateRangePopup.Child = dateRangeSelector;
+            SummaryPopupControl.OnHourlyRateTextboxChange += UpdateWorkYearHourlyRate;
         }
 
         //Attaches Functions to time picker events
@@ -246,7 +247,13 @@ namespace WorkHoursManagementApp.Pages
             }
             DateRangePopup.IsOpen = true;
         }
-
+        private void UpdateWorkYearHourlyRate(decimal newRate)
+        {
+            if (CurrentWorkYear != null)
+            {
+                CurrentWorkYear.HourlyRate = newRate;
+            }
+        }
         private void DateRangeSelector_DatesSelected(DateTime? startDate, DateTime? endDate)
         {
                 
@@ -259,7 +266,6 @@ namespace WorkHoursManagementApp.Pages
                     SummaryPopupControl.TotalHours = totalHours;
                     SummaryPopupControl.StartDate = startDate.Value.ToString("d");
                     SummaryPopupControl.EndDate = endDate.Value.ToString("d");
-                    SummaryPopupControl.HourlyRate = 20.0; 
 
                     SummaryPopup.IsOpen = true;
                 }
@@ -282,6 +288,8 @@ namespace WorkHoursManagementApp.Pages
         {
             ApplyCurrentWorkYear(selectedWorkYear);
             CurrentWorkYear = selectedWorkYear;
+            SummaryPopupControl.UpdatehourlyRate(selectedWorkYear.HourlyRate);
+            //System.Windows.MessageBox.Show($"The Hourly rate was updated to {selectedWorkYear.HourlyRate} for {CurrentWorkYear.WorkYearName}");
         }
         public void ApplyCurrentWorkYear(WorkYear currentWorkYear)
         {
@@ -333,8 +341,7 @@ namespace WorkHoursManagementApp.Pages
         }
         private void OnNewWorkYearAdded(WorkYear newWorkYear)
         {
-            currentUser.AddWorkYear(newWorkYear.WorkYearStartDate, newWorkYear.WorkYearEndDate,newWorkYear.WorkYearName);
-            //ChooseWorkYearControl.LoadWorkYears(currentUser.WorkYearsList);
+            currentUser.AddWorkYear(newWorkYear.WorkYearStartDate, newWorkYear.WorkYearEndDate,newWorkYear.WorkYearName,  newWorkYear.HourlyRate);
         }
         public void SetEditWorkYearData(WorkYear CurrentWorkYear)
         {
@@ -349,9 +356,24 @@ namespace WorkHoursManagementApp.Pages
             {
                 workYearToReplace.WorkYearStartDate = editedWorkYear.WorkYearStartDate;
                 workYearToReplace.WorkYearEndDate = editedWorkYear.WorkYearEndDate;
-                workYearToReplace.WorkYearName = editedWorkYear.WorkYearName;   
-                //ApplyCurrentWorkYear(workYearToReplace);
+                workYearToReplace.WorkYearName = editedWorkYear.WorkYearName; 
+                workYearToReplace.HourlyRate = editedWorkYear.HourlyRate;
+                ApplyCurrentWorkYear(workYearToReplace);
             }
+        }
+
+        private void WorkHourFeeButton_Click(object sender, RoutedEventArgs e)
+        {
+            HourlyRatePopup.IsOpen = true;
+        }
+        private void HourlyRateOkButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+            decimal newHourlyRate= HourlyRateNumericUpDown.Value ?? 0;
+            CurrentWorkYear.HourlyRate=newHourlyRate;
+            SummaryPopupControl.UpdatehourlyRate(newHourlyRate);
+            System.Windows.MessageBox.Show($"The Hourly rate was updated to{newHourlyRate}");
+            
         }
     }
 

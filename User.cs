@@ -16,11 +16,11 @@ namespace WorkHoursManagementApp
         {
             Username = username;
             WorkYearsList = new ObservableCollection<WorkYear>();
-        }
+    }
 
-        public void AddWorkYear(DateTime startDate, DateTime endDate,string YearName)
+        public void AddWorkYear(DateTime startDate, DateTime endDate,string YearName, decimal hourlyRate)
         {         
-                     WorkYear workYear = new WorkYear(startDate,endDate,YearName);
+                     WorkYear workYear = new WorkYear(startDate,endDate,YearName,hourlyRate);
 
                 for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
                 {
@@ -35,11 +35,6 @@ namespace WorkHoursManagementApp
                 }
 
                 WorkYearsList.Add(workYear);
-        }
-
-        public void EditWorkYear(DateTime startDate, DateTime endDate, string YearName)
-        {
-           
         }
 
         public WorkYear GetWorkYearByDate(DateTime date)

@@ -21,10 +21,11 @@ namespace WorkHoursManagementApp.UserControls
         private DateTime? _startDate;
         private DateTime? _endDate;
         private string _yearName;
+        private decimal _editHourlyRate;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public event Action<DateTime?, DateTime?, string> EditWorkYearPopupOkClicked;
+        public event Action<DateTime?, DateTime?, string,decimal> EditWorkYearPopupOkClicked;
 
         public EditWorkYear()
         {
@@ -69,6 +70,18 @@ namespace WorkHoursManagementApp.UserControls
                 }
             }
         }
+        public decimal EditHourlyRate
+        {
+            get => _editHourlyRate;
+            set
+            {
+                if (_editHourlyRate != value)
+                {
+                    _editHourlyRate = value;
+                    OnPropertyChanged(nameof(EditHourlyRate));
+                }
+            }
+        }
 
         private void OnPropertyChanged(string propertyName)
         {
@@ -77,12 +90,13 @@ namespace WorkHoursManagementApp.UserControls
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
 
-            EditWorkYearPopupOkClicked?.Invoke(StartDate, EndDate, YearName);
-
+            EditWorkYearPopupOkClicked?.Invoke(StartDate, EndDate, YearName,EditHourlyRate);
+            
 
             YearName = string.Empty;
             StartDate = null;
             EndDate = null;
+            
         }
     }
 }

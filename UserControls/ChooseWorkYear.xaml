@@ -9,17 +9,19 @@
     <Grid Background="White">
         <Viewbox>
             <StackPanel Margin="20" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White">
-                <TextBlock Text="User Work Years" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                <TextBlock Text="Work Years" FontWeight="Bold" Margin="0,0,0,10" HorizontalAlignment="Center" FontSize="18"/>
                 <ListBox x:Name="WorkYearListBox" Width="210" Height="150" Margin="0,0,0,10" SelectionMode="Single" MouseDoubleClick="ChangeWorkYearButton_Click">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding WorkYearName}" FontWeight="Bold" FontSize="14" />
-                                <TextBlock Text="{Binding WorkYearStartDate, StringFormat='Start Date: {0:dd//MM/yyyy}'}" />
-                                <TextBlock Text="{Binding WorkYearEndDate, StringFormat='End Date: {0:dd//MM/yyyy}'}" />
+                                <TextBlock Text="{Binding WorkYearStartDate, StringFormat='Start Date: {0:dd/MM/yyyy}'}" />
+                                <TextBlock Text="{Binding WorkYearEndDate, StringFormat='End Date: {0:dd/MM/yyyy}'}" />
+                                <TextBlock Text="{Binding HourlyRate, StringFormat='Hourly Rate: ₪{0:N2}'}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+
                 </ListBox>
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Button Content="Apply Work Year" Width="170" Click="ChangeWorkYearButton_Click" Margin="0,0,0,10" Background="White" BorderThickness="2" BorderBrush="#FF72DFD9"/>

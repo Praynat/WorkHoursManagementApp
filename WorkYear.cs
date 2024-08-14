@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using WorkHoursManagementApp.UserControls;
 
 namespace WorkHoursManagementApp
 {
@@ -10,6 +11,8 @@ namespace WorkHoursManagementApp
         private DateTime _workYearStartDate;
         private DateTime _workYearEndDate;
         private string _workYearName;
+        private decimal _hourlyRate { get; set; }
+
 
         public DateTime WorkYearStartDate
         {
@@ -49,16 +52,31 @@ namespace WorkHoursManagementApp
                 }
             }
         }
+        public decimal HourlyRate
+        {
+            get => _hourlyRate;
+            set
+            {
+                if (_hourlyRate != value)
+                {
+                    _hourlyRate = value;
+                    OnPropertyChanged(nameof(HourlyRate));
+                }
+            }
+        }
+
+
 
         public string YearName { get; set; }
         public List<DailyWorkHours> DailyWorkHoursList { get; set; }
 
-        public WorkYear(DateTime workYearStartDate, DateTime workYearEndDate, string workYearName)
+        public WorkYear(DateTime workYearStartDate, DateTime workYearEndDate, string workYearName,decimal hourlyRate)
         {
             WorkYearStartDate = workYearStartDate;
             WorkYearEndDate = workYearEndDate;
             WorkYearName = workYearName;
             DailyWorkHoursList = new List<DailyWorkHours>();
+            HourlyRate = hourlyRate;
         }
 
         public bool Overlaps(DateTime startDate, DateTime endDate)

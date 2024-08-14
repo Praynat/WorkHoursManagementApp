@@ -8,7 +8,7 @@ namespace WorkHoursManagementApp.UserControls
 {
     public partial class SummaryPopup : UserControl, INotifyPropertyChanged
     {
-        private double _hourlyRate;
+        private decimal _hourlyRate;
         private double _totalHours;
         private string _startDate;
         private string _endDate;
@@ -16,8 +16,10 @@ namespace WorkHoursManagementApp.UserControls
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public Action<decimal> OnHourlyRateTextboxChange;
+
         // Bindable properties
-        public double HourlyRate
+        public decimal HourlyRate
         {
             get => _hourlyRate;
             set
@@ -94,14 +96,17 @@ namespace WorkHoursManagementApp.UserControls
 
         private void UpdateSalary()
         {
-            Salary = TotalHours * HourlyRate;
+            Salary = (double)((decimal)TotalHours * HourlyRate);
         }
-
+        public void UpdatehourlyRate(decimal rate)
+        {
+            HourlyRate = rate;
+        }
         private void UpdateDisplayText()
         {
             HoursSummaryText.Text = $"The amount of hours you have worked from \n {StartDate} to {EndDate} is:";
             TotalHoursText.Text = $"{TotalHours:F2} hours";
-            TotalSalaryText.Text = $"The amount of money you received is: ${Salary:F2}";
+            TotalSalaryText.Text = $"The amount of money you received is: ₪{Salary:F2}";
         }
 
         private void OnPropertyChanged(string propertyName)
@@ -114,7 +119,10 @@ namespace WorkHoursManagementApp.UserControls
 
             UpdateSalary();
             UpdateDisplayText() ;
-
+            if (decimal.TryParse(HourlyRateTextBox.Text, out decimal rate))
+            {
+                OnHourlyRateTextboxChange?.Invoke(rate);
+            }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

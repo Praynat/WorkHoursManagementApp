@@ -48,11 +48,11 @@ namespace WorkHoursManagementApp.UserControls
             this.Visibility = Visibility.Collapsed;
 
         }
-        private void OnAddYearPopupOkClicked( DateTime? startDate, DateTime? endDate, string workYearName)
+        private void OnAddYearPopupOkClicked( DateTime? startDate, DateTime? endDate, string workYearName, decimal hourlyRate)
         {
-            if (!string.IsNullOrEmpty(workYearName) && startDate.HasValue && endDate.HasValue)
+            if (!string.IsNullOrEmpty(workYearName) && startDate.HasValue && endDate.HasValue && hourlyRate > 0)
             {
-                WorkYear newWorkYear = new WorkYear(startDate.Value, endDate.Value, workYearName);
+                WorkYear newWorkYear = new WorkYear(startDate.Value, endDate.Value, workYearName, hourlyRate);
                 AddYearPopupOkClicked?.Invoke(newWorkYear);
             }
                 AddWorkYearPopup.IsOpen = false;
@@ -82,6 +82,7 @@ namespace WorkHoursManagementApp.UserControls
                 EditWorkYearControl.YearName = selectedWorkYear.WorkYearName;
                 EditWorkYearControl.StartDate = selectedWorkYear.WorkYearStartDate;
                 EditWorkYearControl.EndDate = selectedWorkYear.WorkYearEndDate;
+                EditWorkYearControl.HourlyRateNumericUpDown.Value = selectedWorkYear.HourlyRate;
                 this.Visibility = Visibility.Collapsed;
             }
             else
@@ -117,14 +118,15 @@ namespace WorkHoursManagementApp.UserControls
         {
             this.Visibility = Visibility.Visible;
         }
-        private void OnEditYearPopupOkClicked(DateTime? startDate, DateTime? endDate, string workYearName)
+        private void OnEditYearPopupOkClicked(DateTime? startDate, DateTime? endDate, string workYearName, decimal hourlyRate)
         {
             if (!string.IsNullOrEmpty(workYearName) && startDate.HasValue && endDate.HasValue&& WorkYearListBox.SelectedItem is WorkYear selectedWorkYear)
             {
 
-                WorkYear editedWorkYear = new WorkYear(startDate.Value, endDate.Value, workYearName);
+                WorkYear editedWorkYear = new WorkYear(startDate.Value, endDate.Value, workYearName, hourlyRate);
                 string selectedYearName = selectedWorkYear.WorkYearName;
                 EditWorkYearPopupOkClicked?.Invoke(editedWorkYear,selectedYearName);
+                
             }
             else
             {
