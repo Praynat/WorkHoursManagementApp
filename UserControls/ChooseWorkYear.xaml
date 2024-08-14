@@ -15,8 +15,8 @@
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding WorkYearName}" FontWeight="Bold" FontSize="14" />
-                                <TextBlock Text="{Binding WorkYearStartDate, StringFormat='Start Date: {0:MM/dd/yyyy}'}" />
-                                <TextBlock Text="{Binding WorkYearEndDate, StringFormat='End Date: {0:MM/dd/yyyy}'}" />
+                                <TextBlock Text="{Binding WorkYearStartDate, StringFormat='Start Date: {0:dd//MM/yyyy}'}" />
+                                <TextBlock Text="{Binding WorkYearEndDate, StringFormat='End Date: {0:dd//MM/yyyy}'}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -36,6 +36,12 @@
         <Popup x:Name="AddWorkYearPopup" Placement="Center" StaysOpen="False" IsOpen="False" AllowsTransparency="True">
             <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="5">
                 <local:NewYearControl x:Name="AddWorkYearControl" />
+            </Border>
+        </Popup>
+        <!-- Edit Work Year Popup -->
+        <Popup x:Name="EditWorkYearPopup" Placement="Center" StaysOpen="False" IsOpen="False" AllowsTransparency="True">
+            <Border Background="White" BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="5">
+                <local:EditWorkYear x:Name="EditWorkYearControl" />
             </Border>
         </Popup>
     </Grid>

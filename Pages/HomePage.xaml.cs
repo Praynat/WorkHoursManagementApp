@@ -40,7 +40,7 @@ namespace WorkHoursManagementApp.Pages
             ChooseWorkYearControl.WorkYearDeleted+= ChooseWorkYear_WorkYearDeleted;
 
             ChooseWorkYearControl.AddYearPopupOkClicked += OnNewWorkYearAdded;
-
+            ChooseWorkYearControl.EditWorkYearPopupOkClicked += OnNewWorkYearEdited;
 
             //Takes in hand the basic function of updating the workhours
             DailyWorkHoursItems = new ObservableCollection<DailyWorkHours>();
@@ -283,7 +283,7 @@ namespace WorkHoursManagementApp.Pages
             ApplyCurrentWorkYear(selectedWorkYear);
             CurrentWorkYear = selectedWorkYear;
         }
-        private void ApplyCurrentWorkYear(WorkYear currentWorkYear)
+        public void ApplyCurrentWorkYear(WorkYear currentWorkYear)
         {
                   
             DateTime workYearStartDate = currentWorkYear.WorkYearStartDate;
@@ -335,6 +335,23 @@ namespace WorkHoursManagementApp.Pages
         {
             currentUser.AddWorkYear(newWorkYear.WorkYearStartDate, newWorkYear.WorkYearEndDate,newWorkYear.WorkYearName);
             //ChooseWorkYearControl.LoadWorkYears(currentUser.WorkYearsList);
+        }
+        public void SetEditWorkYearData(WorkYear CurrentWorkYear)
+        {
+            ChooseWorkYearControl.EditWorkYearControl.YearName = CurrentWorkYear.WorkYearName;
+            ChooseWorkYearControl.EditWorkYearControl.StartDate = CurrentWorkYear.WorkYearStartDate;
+            ChooseWorkYearControl.EditWorkYearControl.EndDate = CurrentWorkYear.WorkYearEndDate;
+        }
+        private void OnNewWorkYearEdited(WorkYear editedWorkYear,string nameOfYearToEdit)
+        {
+           WorkYear workYearToReplace= currentUser.GetWorkYearByName(nameOfYearToEdit);
+            if (workYearToReplace != null) 
+            {
+                workYearToReplace.WorkYearStartDate = editedWorkYear.WorkYearStartDate;
+                workYearToReplace.WorkYearEndDate = editedWorkYear.WorkYearEndDate;
+                workYearToReplace.WorkYearName = editedWorkYear.WorkYearName;   
+                //ApplyCurrentWorkYear(workYearToReplace);
+            }
         }
     }
 

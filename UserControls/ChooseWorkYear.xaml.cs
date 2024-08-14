@@ -16,13 +16,19 @@ namespace WorkHoursManagementApp.UserControls
         public event Action<WorkYear> WorkYearDeleted;
 
         //Event to pass the added year to the home page
-        public event Action<WorkYear> AddYearPopupOkClicked; 
+        public event Action<WorkYear> AddYearPopupOkClicked;
+        //Event to pass the edited year to the home page
+        public event Action<WorkYear,string> EditWorkYearPopupOkClicked;
 
         public ChooseWorkYear()
         {
             InitializeComponent();
             AddWorkYearControl.AddYearPopupOkClicked += OnAddYearPopupOkClicked;
+            EditWorkYearControl.EditWorkYearPopupOkClicked+= OnEditYearPopupOkClicked;
+
             AddWorkYearPopup.Closed += AddWorkYearPopup_Closed;
+            EditWorkYearPopup.Closed += EditWorkYearPopup_Closed;
+
         }
 
         // Method to load work years into the ListBox
@@ -49,13 +55,7 @@ namespace WorkHoursManagementApp.UserControls
                 WorkYear newWorkYear = new WorkYear(startDate.Value, endDate.Value, workYearName);
                 AddYearPopupOkClicked?.Invoke(newWorkYear);
             }
-                
-
-
-
                 AddWorkYearPopup.IsOpen = false;
-
-            // Hide the ChooseWorkYearPopup
             this.Visibility = Visibility.Visible;
 
         }
@@ -76,17 +76,21 @@ namespace WorkHoursManagementApp.UserControls
         // Event handler for "Edit" button click
         private void EditYearButton_Click(object sender, RoutedEventArgs e)
         {
-               
             if (WorkYearListBox.SelectedItem is WorkYear selectedWorkYear)
             {
-                WorkYearEdited?.Invoke(selectedWorkYear);
+                EditWorkYearPopup.IsOpen = true;
+                EditWorkYearControl.YearName = selectedWorkYear.WorkYearName;
+                EditWorkYearControl.StartDate = selectedWorkYear.WorkYearStartDate;
+                EditWorkYearControl.EndDate = selectedWorkYear.WorkYearEndDate;
+                this.Visibility = Visibility.Collapsed;
             }
             else
             {
                 MessageBox.Show("Please select a work year to edit.", "Select Work Year", MessageBoxButton.OK, MessageBoxImage.Information);
-                
             }
-           
+
+
+
         }
 
         // Event handler for "Delete" button click
@@ -108,6 +112,27 @@ namespace WorkHoursManagementApp.UserControls
         private void AddWorkYearPopup_Closed(object sender, EventArgs e)
         {
             this.Visibility = Visibility.Visible;
+        }
+        private void EditWorkYearPopup_Closed(object sender, EventArgs e)
+        {
+            this.Visibility = Visibility.Visible;
+        }
+        private void OnEditYearPopupOkClicked(DateTime? startDate, DateTime? endDate, string workYearName)
+        {
+            if (!string.IsNullOrEmpty(workYearName) && startDate.HasValue && endDate.HasValue&& WorkYearListBox.SelectedItem is WorkYear selectedWorkYear)
+            {
+
+                WorkYear editedWorkYear = new WorkYear(startDate.Value, endDate.Value, workYearName);
+                string selectedYearName = selectedWorkYear.WorkYearName;
+                EditWorkYearPopupOkClicked?.Invoke(editedWorkYear,selectedYearName);
+            }
+            else
+            {
+                MessageBox.Show("Please Enter correct details.", "Enter Details", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            EditWorkYearPopup.IsOpen = false;
+            this.Visibility = Visibility.Visible;
+
         }
     }
 }

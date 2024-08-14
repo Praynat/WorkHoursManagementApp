@@ -121,7 +121,7 @@
             <TextBlock FontSize="20" FontFamily="Aharoni" FontWeight="Bold" FontStretch="Condensed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,20">Options</TextBlock>
             <Button Content="Show Summary by dates" Margin="10" Click="ShowSummaryButton_Click"/>
             <Button Content="Change Weekly Planning" Margin="10"/>
-            <Button Content="Change Work Year" Margin="10" Click="ChangeWorkYearButton_Click"/>
+            <Button Content="Manage Work Year" Margin="10" Click="ChangeWorkYearButton_Click"/>
         </StackPanel>
         
 

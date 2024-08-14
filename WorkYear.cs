@@ -1,16 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WorkHoursManagementApp
 {
-    public class WorkYear
+    public class WorkYear : INotifyPropertyChanged
     {
-        public DateTime WorkYearStartDate { get; set; }
-        public DateTime WorkYearEndDate { get; set; }
-        public string WorkYearName { get; set; }
+        private DateTime _workYearStartDate;
+        private DateTime _workYearEndDate;
+        private string _workYearName;
+
+        public DateTime WorkYearStartDate
+        {
+            get => _workYearStartDate;
+            set
+            {
+                if (_workYearStartDate != value)
+                {
+                    _workYearStartDate = value;
+                    OnPropertyChanged(nameof(WorkYearStartDate));
+                }
+            }
+        }
+
+        public DateTime WorkYearEndDate
+        {
+            get => _workYearEndDate;
+            set
+            {
+                if (_workYearEndDate != value)
+                {
+                    _workYearEndDate = value;
+                    OnPropertyChanged(nameof(WorkYearEndDate));
+                }
+            }
+        }
+
+        public string WorkYearName
+        {
+            get => _workYearName;
+            set
+            {
+                if (_workYearName != value)
+                {
+                    _workYearName = value;
+                    OnPropertyChanged(nameof(WorkYearName));
+                }
+            }
+        }
+
         public string YearName { get; set; }
         public List<DailyWorkHours> DailyWorkHoursList { get; set; }
 
@@ -38,7 +77,7 @@ namespace WorkHoursManagementApp
         {
             return DailyWorkHoursList.Aggregate(TimeSpan.Zero, (sum, dwh) => sum + dwh.GetTotalWorkHours());
         }
-        
+
         public double WorkHoursSumByDate(DateTime startDate, DateTime endDate)
         {
             DateOnly start = DateOnly.FromDateTime(startDate);
@@ -50,6 +89,12 @@ namespace WorkHoursManagementApp
 
             return totalWorkHours.TotalHours;
         }
-    }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
 }

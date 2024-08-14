@@ -37,6 +37,11 @@ namespace WorkHoursManagementApp
                 WorkYearsList.Add(workYear);
         }
 
+        public void EditWorkYear(DateTime startDate, DateTime endDate, string YearName)
+        {
+           
+        }
+
         public WorkYear GetWorkYearByDate(DateTime date)
         {
             var dateOnly = DateOnly.FromDateTime(date); // Convert DateTime to DateOnly for comparison
