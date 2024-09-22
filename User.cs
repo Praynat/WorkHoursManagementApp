@@ -25,7 +25,21 @@ namespace WorkHoursManagementApp
 
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
-                if (date.DayOfWeek != DayOfWeek.Saturday)
+                // Skip adding work hours for Friday
+                if (date.DayOfWeek == DayOfWeek.Friday)
+                {
+                    workYear.DailyWorkHoursList.Add(new DailyWorkHours
+                    {
+                        Date = DateOnly.FromDateTime(date),
+                        WorkShift = new Models.WorkShiftData
+                        {
+                            StartTime = DateTime.MinValue, // No work shift
+                            EndTime = DateTime.MinValue
+                        },
+                        MissedTime = new TimeMissedData(DateTime.Today.AddHours(0)) // No missed time for Friday
+                    });
+                }
+                else if (date.DayOfWeek != DayOfWeek.Saturday)
                 {
                     var endTime = date.DayOfWeek == DayOfWeek.Tuesday
                         ? DateTime.Today.AddHours(14).AddMinutes(40) // 14:40 on Tuesday
@@ -53,6 +67,7 @@ namespace WorkHoursManagementApp
 
             WorkYearsList.Add(workYear);
         }
+
 
 
 
