@@ -9,7 +9,8 @@
     <Grid Background="White">
         <StackPanel Orientation="Horizontal" Height="35" Margin="0,0,0,0" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Text="Hours Missed:" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,0,0"/>
-            <xctk:TimePicker x:Name="timeMissedPicker" Value="{Binding TimeMissed,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"/>
+            <xctk:TimePicker x:Name="timeMissedPicker" Value="{Binding TimeMissed,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Format="Custom" FormatString="HH:mm" Margin="10,5,10,5" MinWidth="70" Height="20" Width="100" VerticalAlignment="Center"
+                             TimeInterval="00:10:00"/>
         </StackPanel>
     </Grid>
 </UserControl>

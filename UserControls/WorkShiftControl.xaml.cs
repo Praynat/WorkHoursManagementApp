@@ -56,5 +56,7 @@ namespace WorkHoursManagementApp.UserControls
         {
             EndTime = newTime;
         }
+       
+
     }
 }

@@ -58,8 +58,8 @@ namespace WorkHoursManagementApp.Models
         public WorkShiftData()
         {
             Date = DateOnly.FromDateTime(DateTime.Today);
-            StartTime = DateTime.Today.AddHours(9);
-            EndTime = DateTime.Today.AddHours(17);
+            StartTime = DateTime.Today.AddHours(7.5);
+            EndTime = DateTime.Today.AddHours(15.25);
         }
 
         public WorkShiftData(DateTime startTime, DateTime endTime, DateOnly date)

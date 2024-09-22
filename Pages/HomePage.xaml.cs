@@ -1,23 +1,28 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Xml;
 using WorkHoursManagementApp.Models;
 using WorkHoursManagementApp.UserControls;
 using WorkHoursManagementApp.Utilities;
 using Xceed.Wpf.Toolkit;
+
 
 namespace WorkHoursManagementApp.Pages
 {
     public partial class HomePage : Page
     {
         private User currentUser;
-        
+        private string userDataFilePath = "userData.json";
+
         public ObservableCollection<DailyWorkHours> DailyWorkHoursItems { get; set; }
         private List<DateTime> allBlackoutDates;
         private WorkYear CurrentWorkYear { get; set; }
@@ -27,12 +32,20 @@ namespace WorkHoursManagementApp.Pages
             InitializeComponent();
             DataContext = this;
 
-            //creating user and workyear
-            currentUser = new User("Nathan");
+            Application.Current.MainWindow.Closing += OnWindowClosing;
 
+            // Load user data from JSON file
+            currentUser = LoadUserData(userDataFilePath) ?? new User("Nathan");
+
+            //creating user and workyear if empty for demo
+            if (currentUser.WorkYearsList == null || !currentUser.WorkYearsList.Any())
+            {   
+            currentUser = new User("Nathan");
+            currentUser.AddWorkYear(new DateTime(2024, 9, 1), new DateTime(2025, 7, 31), "Yeshivat Noam 2024-2025", 32.3m);
             currentUser.AddWorkYear(new DateTime(2023, 9, 1), new DateTime(2024, 7, 31), "Yeshivat Noam 2023-2024",42);
             currentUser.AddWorkYear(new DateTime(2022, 10, 1), new DateTime(2023, 8, 30), "Yeshivat Noam 2022-2023",32);
             currentUser.AddWorkYear(new DateTime(2021, 11, 1), new DateTime(2022, 9, 30), "Yeshivat Noam 2021-2022",31.9m);
+            }
 
             //Methods passed on from the ChooseWorkYear Control for choosing and adding WorkYears
             ChooseWorkYearControl.LoadWorkYears(currentUser.WorkYearsList);
@@ -52,6 +65,31 @@ namespace WorkHoursManagementApp.Pages
             dateRangeSelector.DatesSelected += DateRangeSelector_DatesSelected;
             DateRangePopup.Child = dateRangeSelector;
             SummaryPopupControl.OnHourlyRateTextboxChange += UpdateWorkYearHourlyRate;
+        }
+
+        private void OnWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SaveUserData(currentUser, userDataFilePath);
+        }
+        private void SaveUserData(User user, string filePath)
+        {
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true 
+            };
+
+            var jsonData = JsonSerializer.Serialize(user, options);
+            File.WriteAllText(filePath, jsonData);
+        }
+
+        private User LoadUserData(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return null;
+
+            var jsonData = File.ReadAllText(filePath);
+            var user = JsonSerializer.Deserialize<User>(jsonData);
+            return user;
         }
 
         //Attaches Functions to time picker events

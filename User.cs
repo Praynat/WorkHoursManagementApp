@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using WorkHoursManagementApp.Models;
 
 namespace WorkHoursManagementApp
 {
@@ -18,24 +19,42 @@ namespace WorkHoursManagementApp
             WorkYearsList = new ObservableCollection<WorkYear>();
     }
 
-        public void AddWorkYear(DateTime startDate, DateTime endDate,string YearName, decimal hourlyRate)
-        {         
-                     WorkYear workYear = new WorkYear(startDate,endDate,YearName,hourlyRate);
+        public void AddWorkYear(DateTime startDate, DateTime endDate, string YearName, decimal hourlyRate)
+        {
+            WorkYear workYear = new WorkYear(startDate, endDate, YearName, hourlyRate);
 
-                for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
+            {
+                if (date.DayOfWeek != DayOfWeek.Saturday)
                 {
-                    if (date.DayOfWeek != DayOfWeek.Saturday)
-                    {
-                        workYear.DailyWorkHoursList.Add(new DailyWorkHours
-                        {
-                            Date = DateOnly.FromDateTime(date),
-                            WorkShift = new Models.WorkShiftData { StartTime = DateTime.Today.AddHours(9), EndTime = DateTime.Today.AddHours(17) }
-                        });
-                    }
-                }
+                    var endTime = date.DayOfWeek == DayOfWeek.Tuesday
+                        ? DateTime.Today.AddHours(14).AddMinutes(40) // 14:40 on Tuesday
+                        : DateTime.Today.AddHours(15.25);            // 15:15 on other weekdays
 
-                WorkYearsList.Add(workYear);
+                    // Set missed time for Sunday, Monday, and Wednesday (2 hours)
+                    var missedTime = (date.DayOfWeek == DayOfWeek.Sunday ||
+                                      date.DayOfWeek == DayOfWeek.Monday ||
+                                      date.DayOfWeek == DayOfWeek.Wednesday)
+                        ? new TimeMissedData(DateTime.Today.AddHours(2)) // 2 hours of missed time
+                        : new TimeMissedData(DateTime.Today.AddHours(0)); // No missed time on other days
+
+                    workYear.DailyWorkHoursList.Add(new DailyWorkHours
+                    {
+                        Date = DateOnly.FromDateTime(date),
+                        WorkShift = new Models.WorkShiftData
+                        {
+                            StartTime = DateTime.Today.AddHours(7.5), // 07:30
+                            EndTime = endTime
+                        },
+                        MissedTime = missedTime
+                    });
+                }
+            }
+
+            WorkYearsList.Add(workYear);
         }
+
+
 
         public WorkYear GetWorkYearByDate(DateTime date)
         {
